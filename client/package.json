@@ -14,8 +14,11 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-icons": "^5.7.0",
-    "recharts": "^3.10.1",
-    "reicon-react": "^1.2.6"
+    "recharts": "^3.10.1"
+  },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

@@ -13,5 +13,9 @@
   "workspaces": [
     "client",
     "server"
-  ]
+  ],
+  "overrides": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
 }
