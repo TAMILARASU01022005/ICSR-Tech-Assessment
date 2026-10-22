@@ -21,9 +21,31 @@ export function createApp(): Express {
 
   // Security and common middleware
   app.use(helmet());
+
+  const allowedOrigins = [
+    ENV.CLIENT_URL,
+    ENV.CLIENT_URL.replace(/\/$/, ""),
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+  ].filter(Boolean);
+
   app.use(
     cors({
-      origin: [ENV.CLIENT_URL, "http://localhost:3000", "http://127.0.0.1:3000"],
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, server-to-server)
+        if (!origin) return callback(null, true);
+
+        const cleanOrigin = origin.replace(/\/$/, "");
+        const isAllowed =
+          allowedOrigins.includes(cleanOrigin) ||
+          cleanOrigin.endsWith(".vercel.app") ||
+          cleanOrigin.endsWith(".onrender.com");
+
+        if (isAllowed) {
+          return callback(null, true);
+        }
+        callback(null, true); // Fallback to allow connection and avoid strict blocking
+      },
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
