@@ -64,8 +64,9 @@ export function createApp(): Express {
     res.status(200).json({ status: "healthy", timestamp: new Date().toISOString() });
   });
 
-  // API Modules
+  // API Modules (Standard '/api' prefix and direct fallback alias)
   app.use("/api/auth", authRoutes);
+  app.use("/auth", authRoutes); // Fallback alias if frontend requests /auth/login directly
   app.use("/api/users", usersRoutes);
   app.use("/api/projects", projectsRoutes);
   app.use("/api/tasks", tasksRoutes);

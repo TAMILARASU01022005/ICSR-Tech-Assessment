@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+// Normalize API URL to always include the '/api' prefix even if user provides base URL without '/api'
+const RAW_API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+const API_BASE_URL = RAW_API_URL.endsWith("/api") ? RAW_API_URL : `${RAW_API_URL}/api`;
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -10,7 +12,8 @@ export async function apiClient<T = any>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE_URL}${cleanEndpoint}`;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
