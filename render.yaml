@@ -1,0 +1,54 @@
+services:
+  # -------------------------------------------------------------
+  # Backend API Web Service (Express.js + TypeScript)
+  # -------------------------------------------------------------
+  - type: web
+    name: icsr-backend
+    env: node
+    plan: free
+    region: oregon
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        fromService:
+          type: web
+          name: icsr-frontend
+          property: host
+          format: https://${host}
+
+  # -------------------------------------------------------------
+  # Frontend Web Service (Next.js 16 App Router)
+  # -------------------------------------------------------------
+  - type: web
+    name: icsr-frontend
+    env: node
+    plan: free
+    region: oregon
+    rootDir: client
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /login
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: icsr-backend
+          property: host
+          format: https://${host}/api
