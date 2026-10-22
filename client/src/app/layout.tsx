@@ -26,7 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-150"
+      >
         <script
           dangerouslySetInnerHTML={{
             __html: `(function() {
@@ -43,11 +46,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             })()`,
           }}
         />
-      </head>
-      <body
-        suppressHydrationWarning
-        className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-150"
-      >
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
