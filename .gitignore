@@ -63,3 +63,7 @@ next-env.d.ts
 
 # Vercel
 .vercel/
+
+# Agent configuration & workspace customizations
+.agents/
+*/.agents/
